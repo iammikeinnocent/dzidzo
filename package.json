@@ -17,6 +17,7 @@
     "seed:demo": "tsx scripts/seed-demo-users.ts"
   },
   "devDependencies": {
+    "esbuild": "^0.28.2",
     "eslint": "^9.18.0",
     "prettier": "^3.4.0",
     "tsx": "^4.23.15",
