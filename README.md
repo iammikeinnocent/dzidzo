@@ -69,6 +69,9 @@ docker compose up -d   # DynamoDB Local on :8000 (integration tests use it)
 
 After deploying the dev stacks, copy `apps/web/.env.example` to
 `apps/web/.env.local` and fill the three values from the CDK outputs.
+The committed `apps/web/.env.production` already carries the dev stack
+values, so CI builds of the site come out configured; update it when a
+new stack replaces those URLs.
 
 ## Roles & permissions
 

@@ -100,11 +100,13 @@ export class AuthStack extends Stack {
           'http://localhost:5173/auth/callback',
           'http://localhost:5174/auth/callback',
           'http://localhost:5175/auth/callback',
+          ...(props.siteOrigin ? [`${props.siteOrigin}/auth/callback`] : []),
         ],
         logoutUrls: [
           'http://localhost:5173',
           'http://localhost:5174',
           'http://localhost:5175',
+          ...(props.siteOrigin ? [props.siteOrigin] : []),
         ],
       },
       preventUserExistenceErrors: true,

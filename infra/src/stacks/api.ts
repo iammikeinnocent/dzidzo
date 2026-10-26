@@ -44,6 +44,9 @@ export class ApiStack extends Stack {
   constructor(scope: Construct, id: string, props: ApiStackProps) {
     super(scope, id, props);
 
+    /** Browser origins allowed to call the API and read presigned assets. */
+    const corsOrigins = ['http://localhost:5173', ...(props.siteOrigin ? [props.siteOrigin] : [])];
+
 
     /**
      * Private assets bucket for avatars, certificates and study materials.
@@ -57,7 +60,7 @@ export class ApiStack extends Stack {
       cors: [
         {
           allowedMethods: [HttpMethods.PUT, HttpMethods.GET],
-          allowedOrigins: ['http://localhost:5173'],
+          allowedOrigins: corsOrigins,
           allowedHeaders: ['*'],
           maxAge: 3600,
         },
@@ -83,7 +86,7 @@ export class ApiStack extends Stack {
         COGNITO_REGION: this.region,
         COGNITO_USER_POOL_ID: props.userPool.userPoolId,
         COGNITO_WEB_CLIENT_ID: props.webClientId,
-        CORS_ORIGINS: 'http://localhost:5173',
+        CORS_ORIGINS: corsOrigins.join(','),
         ASSETS_BUCKET_NAME: assets.bucketName,
       },
     });
@@ -116,10 +119,14 @@ export class ApiStack extends Stack {
           user: false,
         }),
       },
-      // Localhost for local development; extend with the deployed site
-      // origin when it exists (Lambda responses also honor CORS_ORIGINS).
+      // The Gateway-level preflight is a static mock integration: it cannot echo
+      // the request origin, so with multiple origins it would only ever admit
+      // the first one. It therefore allows any origin — the real enforcement
+      // happens on the actual responses, where the Hono cors() middleware
+      // echoes the matching origin from CORS_ORIGINS. API calls carry bearer
+      // tokens rather than cookies, so "*" is safe here.
       defaultCorsPreflightOptions: {
-        allowOrigins: ['http://localhost:5173'],
+        allowOrigins: Cors.ALL_ORIGINS,
         allowMethods: Cors.ALL_METHODS,
         allowHeaders: ['Authorization', 'Content-Type'],
         statusCode: 204,

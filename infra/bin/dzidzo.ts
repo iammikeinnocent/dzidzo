@@ -15,10 +15,12 @@ const env: Environment = {
 };
 
 const dataStack = new DataStack(app, `dzidzo-${stage}-data`, { env, stage });
-const authStack = new AuthStack(app, `dzidzo-${stage}-auth`, { env, stage });
+const siteOrigin = app.node.tryGetContext('siteOrigin') || undefined;
+const authStack = new AuthStack(app, `dzidzo-${stage}-auth`, { env, stage, siteOrigin });
 new ApiStack(app, `dzidzo-${stage}-api`, {
   env,
   stage,
+  siteOrigin,
   mainTable: dataStack.mainTable,
   userPool: authStack.userPool,
   webClientId: authStack.webClient.userPoolClientId,

@@ -9,6 +9,8 @@ import type { Construct } from 'constructs';
 
 export interface DzidzoStackProps extends StackProps {
   stage: 'dev' | 'prod';
+  /** HTTPS origin of the deployed PWA, e.g. https://d1234.cloudfront.net. */
+  siteOrigin?: string;
 }
 
 /**
