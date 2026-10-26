@@ -1,0 +1,11 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "types": ["node"],
+    // aws-cdk-lib's own typings are not exactOptionalPropertyTypes-clean
+    // (e.g. IBucket.isWebsite), so this boundary opts out of that flag.
+    "exactOptionalPropertyTypes": false
+  },
+  "include": ["bin", "src"]
+}

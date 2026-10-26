@@ -1,0 +1,19 @@
+{
+  "name": "@dzidzo/auth-lambda",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "src/pre-token.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@dzidzo/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.145",
+    "typescript": "^5.6.0",
+    "vitest": "^3.0.0"
+  }
+}

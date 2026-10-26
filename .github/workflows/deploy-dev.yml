@@ -1,0 +1,48 @@
+name: Deploy dev
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-dev
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Build · Synth · Deploy (OIDC)
+    runs-on: ubuntu-latest
+    # Skips cleanly until the repository variable is set after the first
+    # local bootstrap of the CI/CD role (outputs print the ARN).
+    if: vars.DEPLOY_ROLE_ARN != ''
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build web app
+        run: pnpm build
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.DEPLOY_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - name: Deploy stacks
+        run: pnpm --filter @dzidzo/infra exec cdk deploy --all -c stage=dev --require-approval never

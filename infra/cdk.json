@@ -1,0 +1,8 @@
+{
+  "app": "tsx bin/dzidzo.ts",
+  "profile": "dzidzo",
+  "watch": {
+    "include": ["**"],
+    "exclude": ["README.md", "cdk*.json", "**/*.d.ts", "**/*.js", "tsconfig.json", "package*.json"]
+  }
+}

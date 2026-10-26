@@ -1,0 +1,26 @@
+{
+  "name": "@dzidzo/infra",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "synth": "cdk synth --quiet",
+    "typecheck": "tsc --noEmit",
+    "bootstrap": "cdk bootstrap --profile dzidzo",
+    "deploy:dev": "cdk deploy --all --profile dzidzo -c stage=dev",
+    "deploy:prod": "cdk deploy --all --profile dzidzo -c stage=prod --require-approval never",
+    "destroy:dev": "cdk destroy --all --profile dzidzo -c stage=dev --require-approval never"
+  },
+  "dependencies": {
+    "@dzidzo/core": "workspace:*",
+    "aws-cdk-lib": "^2.170.0",
+    "constructs": "^10.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "aws-cdk": "^2.1145.0",
+    "esbuild": "^0.28.2",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  }
+}
